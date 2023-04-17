@@ -51,5 +51,5 @@ def rec_list(input):
         input(dict): dictionry of the user's input
 
     Returns:
-        A list containing the restaurants that matches the user's preferences
+        rec_list: A list containing the restaurants that matches the user's preferences
     """
