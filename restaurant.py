@@ -42,3 +42,14 @@ def read_restaurants(filename):
             }
             restaurants.append(restaurant)
         return restaurants
+
+def rec_list(input):
+    """
+    Creates a list of of restaurants based on the user's inputs
+
+    Args:
+        input(dict): dictionry of the user's input
+
+    Returns:
+        A list containing the restaurants that matches the user's preferences
+    """
