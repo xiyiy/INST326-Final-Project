@@ -12,8 +12,6 @@ Creates a restaurant recommendation system that recommends restaurants based on 
 import pandas as pd
 import numpy as np
 import csv
-#read the csv 
-
 
 def read_restaurants(filename):
     """
@@ -43,6 +41,7 @@ def read_restaurants(filename):
             }
             restaurants.append(restaurant)
         return restaurants
+
 def get_user_input(cuisine, rating, location, price_range):
     """
     Takes in the user input
