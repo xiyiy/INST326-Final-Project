@@ -14,6 +14,7 @@ import numpy as np
 import csv
 #read the csv 
 
+
 def read_restaurants(filename):
     """
     Read restaurant data from a CSV file.
@@ -35,10 +36,10 @@ def read_restaurants(filename):
         for row in reader:
             restaurant = {
                 'name': row['Name'],
-                'cuisine': row['Cuisine Style'],
-                'rating': row['Rating'],
-                'location': row['City'],
-                'price_range': row['Price Range']
+                'Type': row['Type'],
+                'rating': row['Reviews'],
+                'location': row['Location'],
+                'price_range': row['Price_Range']
             }
             restaurants.append(restaurant)
         return restaurants
