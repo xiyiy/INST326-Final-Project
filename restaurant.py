@@ -43,8 +43,28 @@ def read_restaurants(filename):
             }
             restaurants.append(restaurant)
         return restaurants
+def get_user_input(cuisine, rating, location, price_range):
+    """
+    Takes in the user input
 
-def rec_list(input):
+    Args:
+        cuisine(str): the type of cuisine served
+        rating(float): the restaurant's rating out of 5
+        location(str): the city where the restaurant is located
+        price_range(str): the restaurant's price range
+
+    Returns:
+        cuisine, rating, location, price_range
+    """
+    
+    cuisine = input("Enter the type of cuisine you want: ")
+    rating = float(input("Enter the minimum rating you want (out of 5): "))
+    location = input("Enter the location you prefer: ")
+    price_range = input("Enter the price range($, $$ or $$$)")
+    
+    return cuisine, rating, location, price_range
+    
+def rec_list(cuisine, rating, location, price_range):
     """
     Creates a list of of restaurants based on the user's inputs
 
