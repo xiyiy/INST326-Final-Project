@@ -1,5 +1,5 @@
 import unittest
-from scraper import read_restaurants
+from restaurant import read_restaurants
 
 class TestScraper(unittest.TestCase):
     
