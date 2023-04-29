@@ -44,6 +44,13 @@ food_type_label.pack()
 food_type_entry = tk.Entry(root, width=50)
 food_type_entry.pack()
 
+# Create the sorting dropdown menu
+sort_options = ["Best Match", "Rating - High to Low", "Rating - Low to High", "Price - High to Low", "Price - Low to High"]
+sort_variable = tk.StringVar(root)
+sort_variable.set(sort_options[0])
+sort_menu = tk.OptionMenu(root, sort_variable, *sort_options)
+sort_menu.pack()
+
 # Create the search results listbox
 listbox = tk.Listbox(root, width=80)
 listbox.pack()
