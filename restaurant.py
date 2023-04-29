@@ -63,8 +63,9 @@ def get_user_input():
     rating = input("Enter the minimum rating you want (out of 5): ")
     user_preference['rating'] = rating
     
-    location = input("Enter the state you prefer: ")
-    user_preference['location'] = location
+    city = input("Enter the state you prefer: ")
+    state = input("Enter the city you prefer: ")
+    user_preference['location'] = city + state 
     
     price_range = input("Enter the price range($, $$ or $$$)")
     user_preference['price_range'] = price_range 
