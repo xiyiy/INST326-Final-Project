@@ -1,7 +1,6 @@
 import requests
 import json
 import tkinter as tk
-from PIL import Image, ImageTk
 import io
 
 # Yelp API Key
@@ -9,49 +8,52 @@ API_KEY = "EXWS2sWe5HTCU-Rg0HqXbuLhrMPfjVBAuaXUute-zQXj6CCuQLH4lUqp0iC92b8PYpLZ5
 
 # Create the Tkinter GUI window
 root = tk.Tk()
-root.geometry("800x600")
+root.geometry("600x400")
 root.title("Yelp Restaurant Search")
+
+root.configure(bg='#c41200')
 
 # Create the search box label and entry field
 search_label = tk.Label(root, text="Search for a Restaurant:")
 search_label.pack()
-search_entry = tk.Entry(root, width=50)
+search_entry = tk.Entry(root, width=30)
 search_entry.pack()
 
 # Create the search parameters labels and entry fields
 city_label = tk.Label(root, text="City:")
 city_label.pack()
-city_entry = tk.Entry(root, width=50)
+city_entry = tk.Entry(root, width=30)
 city_entry.pack()
 
 state_label = tk.Label(root, text="State:")
 state_label.pack()
-state_entry = tk.Entry(root, width=50)
+state_entry = tk.Entry(root, width=30)
 state_entry.pack()
 
 rating_label = tk.Label(root, text="Rating:")
 rating_label.pack()
-rating_entry = tk.Entry(root, width=50)
+rating_entry = tk.Entry(root, width=30)
 rating_entry.pack()
 
 price_label = tk.Label(root, text="Price:")
 price_label.pack()
-price_entry = tk.Entry(root, width=50)
+price_entry = tk.Entry(root, width=30)
 price_entry.pack()
 
 food_type_label = tk.Label(root, text="Food Type:")
 food_type_label.pack()
-food_type_entry = tk.Entry(root, width=50)
+food_type_entry = tk.Entry(root, width=30)
 food_type_entry.pack()
 
 # Create the search results listbox
-listbox = tk.Listbox(root, width=80)
+listbox = tk.Listbox(root, width=50)
 listbox.pack()
 
 # Create the search button
 def search_restaurants():
     # Clear any previous results
     listbox.delete(0, tk.END)
+    
 
     # Get the search term and parameters from the entry fields
     search_term = search_entry.get()

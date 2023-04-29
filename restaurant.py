@@ -3,10 +3,11 @@ Team Members: Xiyi Yang, Sean August, Devin Webb, Ildreed Mbami
 INST326
 Professor Daniel Pauw
 
-We are utlizing TripAdvisor's restaurant dataset from Kaggle.com.
-(https://www.kaggle.com/datasets/siddharthmandgi/tripadvisor-restaurant-recommendation-data-usa)
+We obtained an API key from to utlize the Yelp API. 
+(EXWS2sWe5HTCU-Rg0HqXbuLhrMPfjVBAuaXUute-zQXj6CCuQLH4lUqp0iC92b8PYpLZ5lvofohpSjSpxDxLCqOWpV7Z9vumSoQAV24O0aPV-YbPyopg0YuCLwE_ZHYx)
 
 Creates a restaurant recommendation system that recommends restaurants based on the user's preferences
+and displays the location on a map
 """
 
 import pandas as pd
@@ -67,7 +68,7 @@ def get_user_input():
     state = input("Enter the city you prefer: ")
     user_preference['location'] = city + state 
     
-    price_range = input("Enter the price range($, $$ or $$$)")
+    price_range = input("Enter the price range(1 = $, 2 = $$, 3 = $$$ or 4 = $$$$)")
     user_preference['price_range'] = price_range 
     
     return user_preference
