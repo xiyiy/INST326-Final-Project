@@ -3,10 +3,11 @@ Team Members: Xiyi Yang, Sean August, Devin Webb, Ildreed Mbami
 INST326
 Professor Daniel Pauw
 
-We are utlizing TripAdvisor's restaurant dataset from Kaggle.com.
-(https://www.kaggle.com/datasets/siddharthmandgi/tripadvisor-restaurant-recommendation-data-usa)
+We obtained an API key from to utlize the Yelp API. 
+(EXWS2sWe5HTCU-Rg0HqXbuLhrMPfjVBAuaXUute-zQXj6CCuQLH4lUqp0iC92b8PYpLZ5lvofohpSjSpxDxLCqOWpV7Z9vumSoQAV24O0aPV-YbPyopg0YuCLwE_ZHYx)
 
 Creates a restaurant recommendation system that recommends restaurants based on the user's preferences
+and displays the location on a map
 """
 
 import pandas as pd
@@ -42,7 +43,7 @@ def read_restaurants(filename):
             restaurants.append(restaurant)
         return restaurants
 
-def get_user_input(cuisine, rating, location, price_range):
+def get_user_input():
     """
     Takes in the user input
 
@@ -53,23 +54,44 @@ def get_user_input(cuisine, rating, location, price_range):
         price_range(str): the restaurant's price range
 
     Returns:
-        cuisine, rating, location, price_range
+        user_preference(dict): dictionary of the user preferences
     """
+    user_preference = {}
     
     cuisine = input("Enter the type of cuisine you want: ")
-    rating = float(input("Enter the minimum rating you want (out of 5): "))
-    location = input("Enter the location you prefer: ")
-    price_range = input("Enter the price range($, $$ or $$$)")
+    user_preference['cuisine'] = cuisine
     
-    return cuisine, rating, location, price_range
+    rating = input("Enter the minimum rating you want (out of 5): ")
+    user_preference['rating'] = rating
     
-def rec_list(cuisine, rating, location, price_range):
+    city = input("Enter the state you prefer: ")
+    state = input("Enter the city you prefer: ")
+    user_preference['location'] = city + state 
+    
+    price_range = input("Enter the price range(1 = $, 2 = $$, 3 = $$$ or 4 = $$$$)")
+    user_preference['price_range'] = price_range 
+    
+    return user_preference
+
+def get_rec_list(user_preference, restaurants):
     """
     Creates a list of of restaurants based on the user's inputs
 
     Args:
-        input(dict): dictionry of the user's input
+        user_preference(dict): dictionry of the user's input
+        restaurants(list): list of resturants from API
 
     Returns:
         rec_list: A list containing the restaurants that matches the user's preferences
     """
+
+    rec_list = []
+    for restaurant in restaurants:
+        #if cuisine match or user preference is empty
+        if ((restaurant['cuisine'] == user_preference['cuisine'] or user_preference['cuisine'] == " ") and
+            (restaurant['rating'] >= user_preference['rating'] or user_preference['rating'] == " ") and
+            (restaurant['location'] == user_preference['location'] or user_preference['location'] == " ") and
+            (restaurant['price_range'] == user_preference['price_range'] or user_preference['price_range'] == " ")):
+            rec_list.append(restaurant['name'])
+    return rec_list
+                
