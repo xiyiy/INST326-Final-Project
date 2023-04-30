@@ -1,9 +1,7 @@
 import requests
 import json
 import tkinter as tk
-import io
 import tkintermapview
-import PIL 
 
 # Yelp API Key
 API_KEY = "EXWS2sWe5HTCU-Rg0HqXbuLhrMPfjVBAuaXUute-zQXj6CCuQLH4lUqp0iC92b8PYpLZ5lvofohpSjSpxDxLCqOWpV7Z9vumSoQAV24O0aPV-YbPyopg0YuCLwE_ZHYx"
@@ -54,25 +52,37 @@ my_label.pack(pady=20)
 map_widget = tkintermapview.TkinterMapView(my_label, width=350, height=350, corner_radius=0)
 
 # Set address
-map_widget.set_address("10 West Elm St., Chicago, IL, United States", marker=True, text='apt')
 map_widget.set_zoom(10)
+
 # Create the sorting dropdown menu
 sort_options = ["Best Match", "Rating - High to Low", "Rating - Low to High", "Price - High to Low", "Price - Low to High"]
 sort_variable = tk.StringVar(root)
 sort_variable.set(sort_options[0])
-sort_menu = tk.OptionMenu(root, sort_variable, *sort_options)
+sort_menu = tk.OptionMenu(root, sort_variable, *sort_options) #call sort_by
 sort_menu.pack()
 
 # Create the search results listbox
-listbox = tk.Listbox(root, width=80)
-listbox.pack()
+listbox_frame = tk.Frame(root, bd=2, relief="groove")
+listbox_frame.pack(side="left", fill="both", expand=True)
+
+listbox_scrollbar = tk.Scrollbar(listbox_frame, orient="vertical")
+listbox_scrollbar.pack(side="right", fill="y")
+
+listbox = tk.Listbox(listbox_frame, width=50, yscrollcommand=listbox_scrollbar.set)
+listbox.pack(side="left", fill="both", expand=True)
+
+listbox_scrollbar.config(command=listbox.yview)
 
 # Create the search button
 def search_restaurants():
+    """ Scraps the API and obtain only the fields we need through get requests
+    
+        Args: none
+    """
     # Clear any previous results
     listbox.delete(0, tk.END)
     # Clear previous markers
-    map_widget.clear_markers()
+    map_widget.delete_all_marker()
     
 
     # Get the search term and parameters from the entry fields
@@ -80,8 +90,9 @@ def search_restaurants():
     city = city_entry.get()
     state = state_entry.get()
     rating = rating_entry.get()
-    price = price_entry.get()
+    price_str = price_entry.get()
     food_type = food_type_entry.get()
+    price = get_price_value(price_str)
 
     # Create the search parameters dictionary
     params = {
@@ -108,26 +119,70 @@ def search_restaurants():
         rating = business.get("rating")
         price = business.get("price")
         address = business.get("location", {}).get("address1")
-        city = business.get("location", {}).get("city")
-        state = business.get("location", {}).get("state")
-        country = business.get("location", {}).get("country")
-        full_address = f'{address}, {city}, {state}, {country}'
+        food_type = business.get("food_type")
         listbox.insert(tk.END, f"{name} - Rating: {rating}, Price: {price}, Address: {address}")
-        map_widget.set_address(full_address, marker=True)
         
+        #city = business.get("location", {}).get("city")
+        #state = business.get("location", {}).get("state")
+        #country = business.get("location", {}).get("country")
+        #full_address = f'{address}, {city}, {state}, {country}'
+        #map_widget.set_address(full_address, marker=True)
+
+def get_price_value(price_str):
+    """ Makes sure user string input is converted into 1, 2, 3, 4 used in the API
     
-'''def add_marker():
-    business.get("location", {}).get("address1")
-    for business in listbox:
-        address = business.get("location", {}).get("address1")
-        map_widget.set_address(f'{address}, United States', marker=True)
-'''
+        Args: price_str(str): string of the price
+        
+        Returns: a num representation of the price
+    """
+    if price_str == '$':
+        return '1'
+    elif price_str == '$$':
+        return '2'
+    elif price_str == '$$$':
+        return '3'
+    elif price_str == '$$$$':
+        return '4'
+    else:
+        return None  
+    
+def sort_by(option):
+    """ Sorts the list according to the sort option obtained. 
+    
+        Args: option(str): string of the sort option chosen
+    """
+    if option == 'Best Match':
+        sort_variable.set(sort_options[0])
+    elif option == 'Rating - High to Low':
+        sort_variable.set(sort_options[1])
+    elif option == 'Rating - Low to High':
+        sort_variable.set(sort_options[2])
+    elif option == 'Price - High to Low':
+        sort_variable.set(sort_options[3])
+    elif option == 'Price - Low to High':
+        sort_variable.set(sort_options[4])
+    
+    
+def add_marker(address):
+    """ Adds a marker to each address entered
+    
+        Args: address(str): stong of the address
+    """
+    map_widget.set_address(f'{address}, United States', marker=True)
+        
+
 # Create the search button
 search_button = tk.Button(root, text="Search", command=search_restaurants)
-#search_button = tk.Button(root, text="Search", command=add_marker)
-
-map_widget.pack()
 search_button.pack()
 
+# Create search button for map
+explore_addy = tk.Label(root, text="Enter an address to explore:")
+explore_addy.pack()
+explore_addy_input = tk.Entry(root, width=30)
+explore_addy_input.pack()
 
+search_addy = tk.Button(root, text="Search", command=add_marker)
+search_addy.pack()
+
+map_widget.pack()
 root.mainloop()
