@@ -119,5 +119,5 @@ def get_price_value(price_str):
 # Create the search button
 search_button = tk.Button(root, text="Search", command=search_restaurants)
 search_button.pack()
-
-root.mainloop()
+if __name__ == "__main__":
+    root.mainloop()
