@@ -2,13 +2,15 @@ import requests
 import json
 import tkinter as tk
 import io
+import tkintermapview
+import PIL 
 
 # Yelp API Key
 API_KEY = "EXWS2sWe5HTCU-Rg0HqXbuLhrMPfjVBAuaXUute-zQXj6CCuQLH4lUqp0iC92b8PYpLZ5lvofohpSjSpxDxLCqOWpV7Z9vumSoQAV24O0aPV-YbPyopg0YuCLwE_ZHYx"
 
 # Create the Tkinter GUI window
 root = tk.Tk()
-root.geometry("600x400")
+root.geometry("700x1000")
 root.title("Yelp Restaurant Search")
 
 root.configure(bg='#c41200')
@@ -45,14 +47,26 @@ food_type_label.pack()
 food_type_entry = tk.Entry(root, width=30)
 food_type_entry.pack()
 
+# Create a map 
+my_label = tk.LabelFrame(root)
+my_label.pack(pady=20)
+
+map_widget = tkintermapview.TkinterMapView(my_label, width=350, height=350, corner_radius=0)
+
+# Set address
+map_widget.set_address("10 West Elm St., Chicago, IL, United States", marker=True, text='apt')
+map_widget.set_zoom(10)
+
 # Create the search results listbox
-listbox = tk.Listbox(root, width=50)
+listbox = tk.Listbox(root, width=80)
 listbox.pack()
 
 # Create the search button
 def search_restaurants():
     # Clear any previous results
     listbox.delete(0, tk.END)
+    # Clear previous markers
+    map_widget.clear_markers()
     
 
     # Get the search term and parameters from the entry fields
@@ -88,10 +102,26 @@ def search_restaurants():
         rating = business.get("rating")
         price = business.get("price")
         address = business.get("location", {}).get("address1")
+        city = business.get("location", {}).get("city")
+        state = business.get("location", {}).get("state")
+        country = business.get("location", {}).get("country")
+        full_address = f'{address}, {city}, {state}, {country}'
         listbox.insert(tk.END, f"{name} - Rating: {rating}, Price: {price}, Address: {address}")
-
+        map_widget.set_address(full_address, marker=True)
+        
+    
+'''def add_marker():
+    business.get("location", {}).get("address1")
+    for business in listbox:
+        address = business.get("location", {}).get("address1")
+        map_widget.set_address(f'{address}, United States', marker=True)
+'''
 # Create the search button
 search_button = tk.Button(root, text="Search", command=search_restaurants)
+#search_button = tk.Button(root, text="Search", command=add_marker)
+
+map_widget.pack()
 search_button.pack()
+
 
 root.mainloop()
