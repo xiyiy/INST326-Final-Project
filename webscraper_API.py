@@ -166,12 +166,16 @@ def sort_by(option):
 def add_marker(address):
     """ Adds a marker to each address entered
     
-        Args: address(str): stong of the address
+        Args: address(str): string of the address
     """
     map_widget.set_address(f'{address}, United States', marker=True)
         
 
 def get_food_type_filter(food_type_str):
+    """ Filtering the data by food types entered
+    
+        Args: food_type_str(str): user input of food types 
+    """
     # Return an empty string if no food type is specified
     if not food_type_str:
         return ""
