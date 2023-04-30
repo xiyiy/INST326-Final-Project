@@ -84,7 +84,7 @@ def search_restaurants():
         "location": f"{city}, {state}",
         "rating": rating,
         "price": price,
-        "categories": food_type
+        "categories": get_food_type_filter(food_type)
     }
     
     # Remove any parameters that are not provided by the user
@@ -116,6 +116,21 @@ def get_price_value(price_str):
         return '4'
     else:
         return None   
+def get_food_type_filter(food_type_str):
+    # Return an empty string if no food type is specified
+    if not food_type_str:
+        return ""
+
+    # Split the food type string into a list of individual food types
+    food_types = [c.strip() for c in food_type_str.split(",")]
+
+    # Create a filter string for each food type
+    filters = []
+    for food_type in food_types:
+        filters.append(f"{food_type.lower().replace(' ', '-')}")
+    
+    # Join the filter strings with commas and return the result
+    return ",".join(filters)
 # Create the search button
 search_button = tk.Button(root, text="Search", command=search_restaurants)
 search_button.pack()
