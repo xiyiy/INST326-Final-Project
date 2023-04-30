@@ -8,10 +8,10 @@ API_KEY = "EXWS2sWe5HTCU-Rg0HqXbuLhrMPfjVBAuaXUute-zQXj6CCuQLH4lUqp0iC92b8PYpLZ5
 
 # Create the Tkinter GUI window
 root = tk.Tk()
-root.geometry("700x1000")
+root.geometry("800x600")
 root.title("Yelp Restaurant Search")
 
-root.configure(bg='#c41200')
+root.configure(bg='#FFFFFF')
 
 # Create the search box label and entry field
 search_label = tk.Label(root, text="Search for a Restaurant:")
@@ -30,12 +30,12 @@ state_label.pack()
 state_entry = tk.Entry(root, width=30)
 state_entry.pack()
 
-rating_label = tk.Label(root, text="Rating:")
+rating_label = tk.Label(root, text="rating:")
 rating_label.pack()
 rating_entry = tk.Entry(root, width=30)
 rating_entry.pack()
 
-price_label = tk.Label(root, text="Price:")
+price_label = tk.Label(root, text="price:")
 price_label.pack()
 price_entry = tk.Entry(root, width=30)
 price_entry.pack()
@@ -93,18 +93,18 @@ def search_restaurants():
     price_str = price_entry.get()
     food_type = food_type_entry.get()
     price = get_price_value(price_str)
-
     # Create the search parameters dictionary
     params = {
         "term": search_term,
         "location": f"{city}, {state}",
         "rating": rating,
         "price": price,
-        "categories": food_type
+        "categories": get_food_type_filter(food_type)
     }
+    
     # Remove any parameters that are not provided by the user
     params = {k: v for k, v in params.items() if v}
-
+   
     # Make the API request
     headers = {
         "Authorization": "Bearer " + API_KEY
@@ -171,6 +171,22 @@ def add_marker(address):
     map_widget.set_address(f'{address}, United States', marker=True)
         
 
+def get_food_type_filter(food_type_str):
+    # Return an empty string if no food type is specified
+    if not food_type_str:
+        return ""
+
+    # Split the food type string into a list of individual food types
+    food_types = [c.strip() for c in food_type_str.split(",")]
+
+    # Create a filter string for each food type
+    filters = []
+    for food_type in food_types:
+        filters.append(f"{food_type.lower().replace(' ', '-')}")
+    
+    # Join the filter strings with commas and return the result
+    return ",".join(filters)
+
 # Create the search button
 search_button = tk.Button(root, text="Search", command=search_restaurants)
 search_button.pack()
@@ -185,4 +201,6 @@ search_addy = tk.Button(root, text="Search", command=add_marker)
 search_addy.pack()
 
 map_widget.pack()
-root.mainloop()
+
+if __name__ == "__main__":
+    root.mainloop()
