@@ -201,7 +201,7 @@ explore_addy.pack()
 explore_addy_input = tk.Entry(root, width=30)
 explore_addy_input.pack()
 
-search_addy = tk.Button(root, text="Search", command=add_marker)
+search_addy = tk.Button(root, text="Search Address", command=add_marker)
 search_addy.pack()
 
 map_widget.pack()
