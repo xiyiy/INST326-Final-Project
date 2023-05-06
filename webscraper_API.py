@@ -8,7 +8,7 @@ API_KEY = "EXWS2sWe5HTCU-Rg0HqXbuLhrMPfjVBAuaXUute-zQXj6CCuQLH4lUqp0iC92b8PYpLZ5
 
 # Create the Tkinter GUI window
 root = tk.Tk()
-root.geometry("800x600")
+root.geometry("800x900")
 root.title("Yelp Restaurant Search")
 
 root.configure(bg='#FFFFFF')
@@ -55,7 +55,7 @@ map_widget = tkintermapview.TkinterMapView(my_label, width=350, height=350, corn
 map_widget.set_zoom(10)
 
 # Create the sorting dropdown menu
-sort_options = ["Best Match", "Rating - High to Low", "Rating - Low to High", "Price - High to Low", "Price - Low to High"]
+sort_options = ["best_match", "rating", "review_count"]
 sort_variable = tk.StringVar(root)
 sort_variable.set(sort_options[0])
 sort_menu = tk.OptionMenu(root, sort_variable, *sort_options) #call sort_by
@@ -93,11 +93,13 @@ def search_restaurants():
     price_str = price_entry.get()
     food_type = food_type_entry.get()
     price = get_price_value(price_str)
+    
+    
     # Create the search parameters dictionary
     params = {
         "term": search_term,
         "location": f"{city}, {state}",
-        "rating": rating,
+        "rating": get_rating(rating),
         "price": price,
         "categories": get_food_type_filter(food_type)
     }
@@ -121,12 +123,6 @@ def search_restaurants():
         address = business.get("location", {}).get("address1")
         food_type = business.get("food_type")
         listbox.insert(tk.END, f"{name} - Rating: {rating}, Price: {price}, Address: {address}")
-        
-        #city = business.get("location", {}).get("city")
-        #state = business.get("location", {}).get("state")
-        #country = business.get("location", {}).get("country")
-        #full_address = f'{address}, {city}, {state}, {country}'
-        #map_widget.set_address(full_address, marker=True)
 
 def get_price_value(price_str):
     """ Makes sure user string input is converted into 1, 2, 3, 4 used in the API
@@ -146,35 +142,43 @@ def get_price_value(price_str):
     else:
         return None  
     
+
 def sort_by(option):
     """ Sorts the list according to the sort option obtained. 
     
         Args: option(str): string of the sort option chosen
     """
-    if option == 'Best Match':
+
+    if option == 'best_match':
         sort_variable.set(sort_options[0])
-    elif option == 'Rating - High to Low':
+    elif option == 'rating':
         sort_variable.set(sort_options[1])
-    elif option == 'Rating - Low to High':
+    elif option == 'review_count':
         sort_variable.set(sort_options[2])
-    elif option == 'Price - High to Low':
-        sort_variable.set(sort_options[3])
-    elif option == 'Price - Low to High':
-        sort_variable.set(sort_options[4])
+
     
     
-def add_marker(address):
+def add_marker():
     """ Adds a marker to each address entered
     
         Args: address(str): string of the address
     """
-    map_widget.set_address(f'{address}, United States', marker=True)
+    
+    address = explore_addy_input.get()
+    city = city_entry.get()
+    state = state_entry.get()
+    country = "United States"
+    full_address = f'{address}, {city}, {state}, {country}'
+    
+    map_widget.set_address(full_address, marker=True)
         
 
 def get_food_type_filter(food_type_str):
     """ Filtering the data by food types entered
     
         Args: food_type_str(str): user input of food types 
+        
+        Returns: a join string of the results
     """
     # Return an empty string if no food type is specified
     if not food_type_str:
@@ -191,6 +195,16 @@ def get_food_type_filter(food_type_str):
     # Join the filter strings with commas and return the result
     return ",".join(filters)
 
+def get_rating(ratingNum): #WRONG
+    """ Fitering theresults by rating using the num entered
+    
+        Args: ratingNum(int): the rating num entered by the user 
+        
+        Returns: 
+    """
+    rating_filter = f'{ratingNum}' 
+    return rating_filter
+
 # Create the search button
 search_button = tk.Button(root, text="Search", command=search_restaurants)
 search_button.pack()
@@ -198,6 +212,8 @@ search_button.pack()
 # Create search button for map
 explore_addy = tk.Label(root, text="Enter an address to explore:")
 explore_addy.pack()
+
+# Create input box for address input
 explore_addy_input = tk.Entry(root, width=30)
 explore_addy_input.pack()
 
