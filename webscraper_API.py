@@ -1,14 +1,13 @@
 import requests
 import json
 import tkinter as tk
-import tkintermapview
 
 # Yelp API Key
 API_KEY = "EXWS2sWe5HTCU-Rg0HqXbuLhrMPfjVBAuaXUute-zQXj6CCuQLH4lUqp0iC92b8PYpLZ5lvofohpSjSpxDxLCqOWpV7Z9vumSoQAV24O0aPV-YbPyopg0YuCLwE_ZHYx"
 
 # Create the Tkinter GUI window
 root = tk.Tk()
-root.geometry("800x900")
+root.geometry("800x600")
 root.title("Yelp Restaurant Search")
 
 root.configure(bg='#FFFFFF')
@@ -47,14 +46,8 @@ food_type_entry.pack()
 
 # Create the search button
 def search_restaurants():
-    """ Scraps the API and obtain only the fields we need through get requests
-    
-        Args: none
-    """
     # Clear any previous results
     listbox.delete(0, tk.END)
-    # Clear previous markers
-    map_widget.delete_all_marker()
     
     
     # Get the search term and parameters from the entry fields
@@ -65,9 +58,7 @@ def search_restaurants():
     price_str = price_entry.get()
     food_type = food_type_entry.get()
     price = get_price_value(price_str)
-    
-    
-    # Create the search parameters dictionary
+    # Create the search parameters 
     params = {
         "term": search_term,
         "location": f"{city}, {state}",
@@ -187,12 +178,6 @@ sort_button.pack()
 
 
 def get_food_type_filter(food_type_str):
-    """ Filtering the data by food types entered
-    
-        Args: food_type_str(str): user input of food types 
-        
-        Returns: a join string of the results
-    """
     # Return an empty string if no food type is specified
     if not food_type_str:
         return ""
