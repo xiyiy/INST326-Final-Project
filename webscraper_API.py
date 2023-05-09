@@ -170,11 +170,11 @@ def sort_results():
     elif sort_option == "Rating - High to Low":
         items = sorted(items, key=lambda x: x.split(" - ")[1], reverse=True)
     elif sort_option == "Rating - Low to High":
-        items = sorted(items, key=lambda x: float(x.split("-")[1].split(",")[0].strip()))
+        items = sorted(items, key=lambda x: x.split(" - ")[1])
     elif sort_option == "Price - High to Low":
-        items = sorted(items, key=lambda x: len(x.split("-")[2].strip()), reverse=True)
+        items = sorted(items, key=lambda x: len(x.split(" - ")[2]), reverse=True)
     elif sort_option == "Price - Low to High":
-        items = sorted(items, key=lambda x: len(x.split("-")[2].strip()))
+        items = sorted(items, key=lambda x: len(x.split(" - ")[2]))
     
     # Clear the listbox and add the sorted items
     listbox.delete(0, tk.END)
