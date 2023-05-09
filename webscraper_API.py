@@ -160,21 +160,26 @@ sort_menu.pack(pady=(18,0))
 def sort_results():
     # Get the current sort option
     sort_option = sort_variable.get()
-    
+
     # Get all items in the listbox
     items = listbox.get(0, tk.END)
-    
+
     # Sort the items based on the current sort option
     if sort_option == "Best Match":
         items = sorted(items)
     elif sort_option == "Rating - High to Low":
-        items = sorted(items, key=lambda x: x.split(" - ")[1], reverse=True)
+        items = sorted(items, key=lambda x: float(x.split("Rating: ")[1].split(",")[0]), reverse=True)
     elif sort_option == "Rating - Low to High":
-        items = sorted(items, key=lambda x: x.split(" - ")[1])
+        items = sorted(items, key=lambda x: float(x.split("Rating: ")[1].split(",")[0]))
     elif sort_option == "Price - High to Low":
-        items = sorted(items, key=lambda x: len(x.split(" - ")[2]), reverse=True)
+        items = sorted(items, key=lambda x: x.count("$"), reverse=True)
     elif sort_option == "Price - Low to High":
-        items = sorted(items, key=lambda x: len(x.split(" - ")[2]))
+        items = sorted(items, key=lambda x: x.count("$"))
+
+    # Clear the listbox and add the sorted items
+    listbox.delete(0, tk.END)
+    for item in items:
+        listbox.insert(tk.END, item)
     
     # Clear the listbox and add the sorted items
     listbox.delete(0, tk.END)
@@ -191,7 +196,7 @@ def get_food_type_filter(food_type_str):
     
         Args: food_type_str(str): user input of food types 
         
-        Returns: a join string of the results
+        Returns: a join string oef the results
     """
     # Return an empty string if no food type is specified
     if not food_type_str:
