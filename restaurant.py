@@ -153,6 +153,8 @@ sort_menu.pack(pady=(18,0))
 
 # Create the sort button
 def sort_results():
+    """When a sort option is selected, the function sorts the results list accordingly.
+    """
     # Get the current sort option
     sort_option = sort_variable.get()
 
