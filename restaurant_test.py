@@ -1,6 +1,6 @@
 import unittest
 import tkinter as tk
-from webscraper_API import search_restaurants
+from restaurant import search_restaurants
 
 class YelpRestaurantSearchGUITest(unittest.TestCase):
 
