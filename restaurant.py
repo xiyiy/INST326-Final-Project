@@ -44,18 +44,8 @@ food_type_label = tk.Label(root, text="Food Type:")
 food_type_label.pack()
 food_type_entry = tk.Entry(root, width=30)
 food_type_entry.pack()
-
-# Create the search button
-def search_restaurants():
-    """ Scraps the API and obtain only the fields we need through get requests
-    """
-    # Clear any previous results
-    listbox.delete(0, tk.END)
-    # Clear previous markers
-    map_widget.delete_all_marker()
-    
-    
-    # Get the search term and parameters from the entry fields
+def get_search_params():
+    """ Get the search parameters from the entry fields """
     search_term = search_entry.get()
     city = city_entry.get()
     state = state_entry.get()
@@ -63,8 +53,7 @@ def search_restaurants():
     price_str = price_entry.get()
     food_type = food_type_entry.get()
     price = get_price_value(price_str)
-    
-    
+
     # Create the search parameters dictionary
     params = {
         "term": search_term,
@@ -73,14 +62,23 @@ def search_restaurants():
         "price": price,
         "categories": get_food_type_filter(food_type)
     }
-    
+
     # Remove any parameters that are not provided by the user
     params = {k: v for k, v in params.items() if v}
-   
+
+    return params
+
+# Create the search button
+def search_restaurants():
+    """ Scrapes the API and obtains only the fields we need through get requests """
+    # Clear any previous results
+    listbox.delete(0, tk.END)
+
+    # Get the search parameters from the entry fields
+    params = get_search_params()
+
     # Make the API request
-    headers = {
-        "Authorization": "Bearer " + API_KEY
-    }
+    headers = {"Authorization": "Bearer " + API_KEY}
     response = requests.get("https://api.yelp.com/v3/businesses/search", headers=headers, params=params)
     data = json.loads(response.text)
 
