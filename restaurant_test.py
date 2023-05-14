@@ -1,7 +1,7 @@
-import requests
-import json
 import unittest
 from unittest.mock import patch, Mock
+import requests
+import json
 import tkinter as tk
 import tkintermapview
 
