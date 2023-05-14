@@ -109,7 +109,6 @@ class TestYelpRestaurantSearch(unittest.TestCase):
         
     def test_sort_results(self):
         # Test the sort_results method
-        # Define test inputs
         sort_option = "Rating - High to Low"
 
         # Set the input values in the entry fields
@@ -121,7 +120,6 @@ class TestYelpRestaurantSearch(unittest.TestCase):
         YelpRestaurantSearch.listbox.insert(tk.END, "Restaurant C - Rating: 4.2, Price: $$$$")
         YelpRestaurantSearch.listbox.insert(tk.END, "Restaurant D - Rating: 4.0, Price: $$$")
 
-        # Call the sort_results method
         YelpRestaurantSearch.sort_results()
 
         # Get the sorted items from the listbox
