@@ -7,6 +7,11 @@ API_KEY = "EXWS2sWe5HTCU-Rg0HqXbuLhrMPfjVBAuaXUute-zQXj6CCuQLH4lUqp0iC92b8PYpLZ5
 
 class YelpRestaurantSearch:
     def __init__(self, API_KEY):
+        """ Initialize a class object with the API key
+
+        Args: 
+            API_KEY(str): the Yelp API key
+        """
         self.API_KEY = API_KEY
         self.root = tk.Tk()
         self.root.geometry("800x900")
@@ -15,6 +20,8 @@ class YelpRestaurantSearch:
         self.create_widgets()
 
     def create_widgets(self):
+        """ Creates the GUI widgets for the applicaiton, including labels, entry boxes, buttons, drop down menus, and map
+        """
         # Create the search box label and entry field
         search_label = tk.Label(self.root, text="Search for a Restaurant:")
         search_label.pack()
@@ -48,26 +55,30 @@ class YelpRestaurantSearch:
         self.food_type_entry.pack()
 
         # Create the search button
-        search_button = tk.Button(self.root, text="Search", command=self.search_restaurants)
+        search_button = tk.Button(
+            self.root, text="Search", command=self.search_restaurants)
         search_button.pack(pady=18)
 
         # Create the search results listbox
         self.listbox_frame = tk.Frame(self.root, bd=2, relief="groove")
         self.listbox_frame.pack(side="left", fill="both", expand=True)
 
-        self.listbox_scrollbar = tk.Scrollbar(self.listbox_frame, orient="vertical")
+        self.listbox_scrollbar = tk.Scrollbar(
+            self.listbox_frame, orient="vertical")
         self.listbox_scrollbar.pack(side="right", fill="y")
 
-        self.listbox = tk.Listbox(self.listbox_frame, width=50, yscrollcommand=self.listbox_scrollbar.set)
+        self.listbox = tk.Listbox(
+            self.listbox_frame, width=50, yscrollcommand=self.listbox_scrollbar.set)
         self.listbox.pack(side="left", fill="both", expand=True)
 
         self.listbox_scrollbar.config(command=self.listbox.yview)
 
-        # Create a map 
+        # Create a map
         my_label = tk.LabelFrame(self.root)
         my_label.pack(pady=20)
 
-        self.map_widget = tkintermapview.TkinterMapView(my_label, width=350, height=350, corner_radius=0)
+        self.map_widget = tkintermapview.TkinterMapView(
+            my_label, width=350, height=350, corner_radius=0)
 
         # Set address
         self.map_widget.set_zoom(10)
@@ -80,28 +91,31 @@ class YelpRestaurantSearch:
         self.explore_addy_input = tk.Entry(self.root, width=30)
         self.explore_addy_input.pack()
 
-        search_addy = tk.Button(self.root, text="Search Address", command=self.add_marker)
+        search_addy = tk.Button(
+            self.root, text="Search Address", command=self.add_marker)
         search_addy.pack()
 
         self.map_widget.pack()
 
         # Create the sorting dropdown menu
-        sort_options = ["Best Match", "Rating - High to Low", "Rating - Low to High", "Price - High to Low", "Price - Low to High"]
+        sort_options = ["Best Match", "Rating - High to Low",
+                        "Rating - Low to High", "Price - High to Low", "Price - Low to High"]
         self.sort_variable = tk.StringVar(self.root)
         self.sort_variable.set(sort_options[0])
-        self.sort_menu = tk.OptionMenu(self.root, self.sort_variable, *sort_options)
-        self.sort_menu.pack(pady=(18,0))
+        self.sort_menu = tk.OptionMenu(
+            self.root, self.sort_variable, *sort_options)
+        self.sort_menu.pack(pady=(18, 0))
 
-            # Create the sort button
-        self.sort_button = tk.Button(self.root, text="Sort List", command=self.sort_results)
+        # Create the sort button
+        self.sort_button = tk.Button(
+            self.root, text="Sort List", command=self.sort_results)
         self.sort_button.pack(side=tk.LEFT)
-
-
 
     def get_search_params(self):
         """ Get the search parameters from the entry fields 
-        
-        Returns: params(dict): a dictionary of the user input
+
+        Returns: 
+            params(dict): a dictionary of the user input search parameters
         """
         search_term = self.search_entry.get()
         city = self.city_entry.get()
@@ -127,7 +141,8 @@ class YelpRestaurantSearch:
 
     # Create the search button
     def search_restaurants(self):
-        """ Scrapes the API and obtains only the fields we need through get requests """
+        """Scrapes the API for restaurants and obtains only the fields we need based on the provided parameters"""
+
         # Clear any previous results
         self.listbox.delete(0, tk.END)
 
@@ -136,7 +151,8 @@ class YelpRestaurantSearch:
 
         # Make the API request
         headers = {"Authorization": "Bearer " + self.API_KEY}
-        response = requests.get("https://api.yelp.com/v3/businesses/search", headers=headers, params=params)
+        response = requests.get(
+            "https://api.yelp.com/v3/businesses/search", headers=headers, params=params)
         data = json.loads(response.text)
 
         # Loop through the results and add them to the listbox
@@ -146,24 +162,25 @@ class YelpRestaurantSearch:
             rating = business.get("rating")
             price = business.get("price")
             address = business.get("location", {}).get("address1")
-            self.listbox.insert(tk.END, f"{name} - Rating: {rating}, Price: {price}, Address: {address}")
+            self.listbox.insert(
+                tk.END, f"{name} - Rating: {rating}, Price: {price}, Address: {address}")
 
     def add_marker(self):
-        """ Adds a marker to each address entered
-        """
+        """ Adds a marker to the map widget based on the address entered"""
+
         address = self.explore_addy_input.get()
         city = self.city_entry.get()
         state = self.state_entry.get()
         country = "United States"
         full_address = f'{address}, {city}, {state}, {country}'
-        
+
         self.map_widget.set_address(full_address, marker=True)
-            
 
     # Create the sort button
+
     def sort_results(self):
-        """When a sort option is selected, the function sorts the results list accordingly.
-        """
+        """Sort the recommended restaurants list based on the sort option selected"""
+
         # Get the current sort option
         sort_option = self.sort_variable.get()
 
@@ -174,9 +191,11 @@ class YelpRestaurantSearch:
         if sort_option == "Best Match":
             items = sorted(items)
         elif sort_option == "Rating - High to Low":
-            items = sorted(items, key=lambda x: float(x.split("Rating: ")[1].split(",")[0]), reverse=True)
+            items = sorted(items, key=lambda x: float(
+                x.split("Rating: ")[1].split(",")[0]), reverse=True)
         elif sort_option == "Rating - Low to High":
-            items = sorted(items, key=lambda x: float(x.split("Rating: ")[1].split(",")[0]))
+            items = sorted(items, key=lambda x: float(
+                x.split("Rating: ")[1].split(",")[0]))
         elif sort_option == "Price - High to Low":
             items = sorted(items, key=lambda x: x.count("$"), reverse=True)
         elif sort_option == "Price - Low to High":
@@ -187,14 +206,15 @@ class YelpRestaurantSearch:
         for item in items:
             self.listbox.insert(tk.END, item)
 
-
     def get_food_type_filter(self, food_type_str):
-        """ Filtering the data by food types entered
-        
-            Args: food_type_str(str): user input of food types 
-            
-            Returns: a joined string of the results
+        """ Filtering the data by food types entered and getting the filter string for the specificied food types
+
+        Args: 
+            food_type_str(str): user input of food types 
+
+        Returns: a joined string of filter options for food types
         """
+
         # Return an empty string if no food type is specified
         if not food_type_str:
             return ""
@@ -206,17 +226,20 @@ class YelpRestaurantSearch:
         filters = []
         for food_type in food_types:
             filters.append(f"{food_type.lower().replace(' ', '-')}")
-        
+
         # Join the filter strings with commas and return the result
         return ",".join(filters)
 
     def get_price_value(self, price_str):
-        """ Makes sure user string input is converted into 1, 2, 3, 4 used in the API
-        
-            Args: price_str(str): string of the price
-            
-            Returns: a num representation of the price
+        """Converts the price_str (user input) corresponding numeric values to use in the API
+
+        Args: 
+            price_str(str): string represenation of the price
+
+        Returns: 
+            str or none: The numeric representation of the price or None if not found
         """
+
         if price_str == '$':
             return '1'
         elif price_str == '$$':
@@ -226,9 +249,10 @@ class YelpRestaurantSearch:
         elif price_str == '$$$$':
             return '4'
         else:
-            return None  
+            return None
+
 
     # Start the mainloop
-if __name__== "__main__":
+if __name__ == "__main__":
     yelp_search = YelpRestaurantSearch(API_KEY)
     yelp_search.root.mainloop()
