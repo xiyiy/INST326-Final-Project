@@ -2,7 +2,9 @@ import requests
 import json
 import tkinter as tk
 import tkintermapview
+
 API_KEY = "EXWS2sWe5HTCU-Rg0HqXbuLhrMPfjVBAuaXUute-zQXj6CCuQLH4lUqp0iC92b8PYpLZ5lvofohpSjSpxDxLCqOWpV7Z9vumSoQAV24O0aPV-YbPyopg0YuCLwE_ZHYx"
+
 class YelpRestaurantSearch:
     def __init__(self, API_KEY):
         self.API_KEY = API_KEY
@@ -97,7 +99,10 @@ class YelpRestaurantSearch:
 
 
     def get_search_params(self):
-        """ Get the search parameters from the entry fields """
+        """ Get the search parameters from the entry fields 
+        
+        Returns: params(dict): a dictionary of the user input
+        """
         search_term = self.search_entry.get()
         city = self.city_entry.get()
         state = self.state_entry.get()
