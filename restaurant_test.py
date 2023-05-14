@@ -1,8 +1,8 @@
 import unittest
-from unittest.mock import patch, Mock
 import requests
 import json
 import tkinter as tk
+from unittest.mock import patch, Mock
 import tkintermapview
 
 from restaurant import YelpRestaurantSearch
