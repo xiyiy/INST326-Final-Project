@@ -7,7 +7,6 @@ import tkintermapview
 
 from restaurant import YelpRestaurantSearch
 
-
 class TestYelpRestaurantSearch(unittest.TestCase):
 
     def setUp(self):
