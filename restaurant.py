@@ -39,11 +39,6 @@ class YelpRestaurantSearch:
         self.state_entry = tk.Entry(self.root, width=30)
         self.state_entry.pack()
 
-        rating_label = tk.Label(self.root, text="Rating:")
-        rating_label.pack()
-        self.rating_entry = tk.Entry(self.root, width=30)
-        self.rating_entry.pack()
-
         price_label = tk.Label(self.root, text="Price:")
         price_label.pack()
         self.price_entry = tk.Entry(self.root, width=30)
@@ -103,7 +98,7 @@ class YelpRestaurantSearch:
         self.sort_variable = tk.StringVar(self.root)
         self.sort_variable.set(sort_options[0])
         self.sort_menu = tk.OptionMenu(
-            self.root, self.sort_variable, *sort_options)
+        self.root, self.sort_variable, *sort_options)
         self.sort_menu.pack(pady=(18, 0))
 
         # Create the sort button
@@ -120,7 +115,6 @@ class YelpRestaurantSearch:
         search_term = self.search_entry.get()
         city = self.city_entry.get()
         state = self.state_entry.get()
-        rating = self.rating_entry.get()
         price_str = self.price_entry.get()
         food_type = self.food_type_entry.get()
         price = self.get_price_value(price_str)
@@ -129,7 +123,6 @@ class YelpRestaurantSearch:
         params = {
             "term": search_term,
             "location": f"{city}, {state}",
-            "rating": float(rating) if rating else None,
             "price": price,
             "categories": self.get_food_type_filter(food_type)
         }
